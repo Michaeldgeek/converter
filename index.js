@@ -72,7 +72,7 @@ app.post('/convert_to_pdf', jsonParser, function(req, res) {
         console.log(err);
     });
     output.on('close', function() {
-        res.sendFile(__dirname + '/example.zip');
+        res.sendFile(__dirname + '/output.zip');
     });
     archive.pipe(output);
     convertedFiles.forEach(function(file, index, array) {
