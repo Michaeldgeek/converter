@@ -58,7 +58,7 @@ app.post('/convert_to_pdf', jsonParser, function(req, res) {
         file.writeTo = config.TEMP + file.convertTo;
         unoconv.convert(file.fullPath, 'pdf', function(err, result) {
             // result is returned as a Buffer
-            fs.writeFile(file.writeTo, result);
+            fs.writeFileSync(file.writeTo, result);
             convertedFiles.push(file.writeTo);
             if (index === array.length - 1) {
                 sendOut(convertedFiles);
