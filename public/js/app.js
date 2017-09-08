@@ -39,9 +39,11 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                 headers: {
                     "Content-Type": "application/json"
                 },
+                responseType: 'blob',
                 dataType: 'json'
             }).then(function(success) {
-
+                var file = new Blob([success.data], { type: 'application/zip' });
+                saveAs(file, 'output.zip');
             }, function(err) {
 
             });
