@@ -1,0 +1,179 @@
+<!DOCTYPE html >
+<!--[if IE 8]> <html lang="en" class="ie8 no-js " > <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js " > <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js" ng-app="myApp">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+
+<head>
+    <meta charset="utf-8" />
+    <title>Online PDF tools | Word to PDF</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta http-equiv="content-language" content="en_EN" />
+    <link href="/css/love13.css" rel="stylesheet" type="text/css" />
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/ng-file-upload-shim.min.js"></script>
+    <script src="/js/ng-file-upload.min.js"></script>
+    <script src="/js/app.js" /></script>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+
+<body class="page-header-fixed page-full-width page-footer-fixed LGen index cactionindex brwFirefox ver54 mob systemWindows app" data-ng-controller="WordToPdfCtrl" id="body">
+
+    <!-- BEGIN HEADER -->
+    <div class="header navbar navbar-fixed-top" id="header">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="header-inner">
+            <a class="navbar-brand" href="/" title="Back to homepage">
+                <img src="/images/ilovepdf.svg" width="147" class="img-responsive">
+            </a>
+        </div>
+        <div class="navbar navbar-default" id="navigation">
+            <div class="navbar-header">
+                <button type="button" data-target="#navigation-inner" data-toggle="collapse" class="navbar-toggle">
+                    <span class="sr-only">Menu</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div id="navigation-inner" class="collapse navbar-collapse">
+                <ul class="nav nav-justified">
+                    <li>
+                        <a href="/merge_pdf">Merge PDF</a>
+                    </li>
+                    <li>
+                        <a href="/split_pdf">Split PDF</a>
+                    </li>
+
+                    <li>
+                        <a href="/compress_pdf">Compress PDF</a>
+                    </li>
+                    <li class="dropdown active">
+                        <a data-toggle="dropdown" data-hover="dropdown">
+                        Convert PDF <i class="fa fa-angle-down"></i>
+                    </a>
+                        <ul class="dropdown-menu mega">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <li><a href="/jpg_to_pdf">JPG to PDF</a></li>
+                                    <hr/>
+                                    <li><a href="/word_to_pdf">WORD to PDF</a></li>
+                                    <li><a href="/powerpoint_to_pdf">POWERPOINT to PDF</a></li>
+                                    <li><a href="/excel_to_pdf">EXCEL to PDF</a></li>
+                                </div>
+                                <div class="col-md-6 col2drop">
+                                    <li><a href="/pdf_to_jpg">PDF to JPG</a></li>
+                                    <hr/>
+                                    <li><a href="/pdf_to_word">PDF to WORD</a></li>
+                                    <li><a href="/pdf_to_powerpoint">PDF to POWERPOINT</a></li>
+                                    <li><a href="/pdf_to_excel">PDF to EXCEL</a></li>
+                                </div>
+                            </div>
+                        </ul>
+                    </li>
+                    <li class="dropdown  ">
+                        <a data-toggle="dropdown" data-hover="dropdown">
+                        More PDF tools <i class="fa fa-angle-down"></i>
+                    </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/add_pdf_page_number">Add page numbers</a></li>
+                            <li><a href="/pdf_add_watermark">Add watermark</a></li>
+                            <li><a href="/rotate_pdf">Rotate PDF</a></li>
+                            <li><a href="/unlock_pdf">Unlock PDF</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- END HEADER -->
+    <div class="clearfix"></div>
+    <!-- BEGIN CONTAINER -->
+
+    <div class="page-content-wrapper">
+
+        <!-- BEGIN PAGE -->
+        <div class="page-content">
+            <div class="col-md-12">
+                <div class="btn-group views" data-toggle="buttons">
+                    <label onclick="changeToGridview();" id="gridView" class="btn btn-default tooltips" data-placement="bottom" data-original-title="Change to cover view mode">
+                            <input type="radio" class="toggle"> <i class="fa fa-file-o"></i> </label>
+                </div>
+                <div class="btn-group views" data-toggle="buttons">
+                    <label onclick="changeToListview();" id="listView" class="btn btn-default tooltips" data-placement="bottom" data-original-title="Change to list view mode">
+                            <input type="radio" class="toggle"> <i class="fa fa-bars"></i> </label>
+                </div>
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h1 class="page-title tool">
+                    Convert WORD to PDF </h1>
+
+                <h2 class="page-subtitle">Make DOC and DOCX files easy to read by converting them to PDF.</h2>
+                <hr class="h1">
+                <div id="upload-container">
+                    <a type="button" class="btn redlove btn-xl" id="pickfiles" data-ng-click="state.select();" href="javascript:;">Select WORD file</a>
+                    <div class="exbu" style="visibility: hidden">
+                        <a class="btn redlove btn-icon tooltips" id="gdrive_file_selector" onclick="onApiLoad();" data-placement="right" data-original-title="Select WORD from Google Drive">
+                            <img src="/images/svg_icons/google-drive.svg" width="18px" onerror="this.src='/images/google-drive.png'; this.onerror=null;" alt="" />
+                        </a>
+                        <a class="btn redlove btn-icon tooltips" id="dropbox_file_selector" onclick="dropbox()" data-placement="right" data-original-title="Select WORD from Dropbox">
+                            <img src="/images/svg_icons/dropbox.svg" width="18px" onerror="this.src='/images/dropbox.png'; this.onerror=null;" alt="" />
+                        </a>
+
+                    </div>
+                    <br/>
+                </div>
+            </div>
+
+            <div id="fileGroups" class="margin-top-20" data-ng-show="state.preview">
+                <div class="file tooltips wordpdf" data-ng-repeat="file in state.files" rel="user" data-placement="top" data-original-title="17 KB">
+                    <a class="btn btn-icon-only grey remove tooltips " data-ng-click="state.close($event.currentTarget,file)" style="display: initial" data-placement="top" data-original-title="Remove this file">
+                        <i class="fa fa-times"></i>
+                    </a>
+                    <canvas class="covercanvas" id="cover-o_1bp1f5n7s1sk32t31gqj1u341b6ha" width="150" height="212"></canvas>
+                    <div class="fileInfo">
+                        <span class="filename" style="margin-left: auto; word-wrap: break-word">{{file.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <form class="hide">
+                <input id="file" type="file" ngf-select="state.uploadFiles($files, $invalidFiles)" accept="application/msword,
+                application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            </form>
+            <!-- END PAGE CONTENT-->
+        </div>
+        <!-- END PAGE -->
+
+    </div>
+    <!-- END CONTAINER -->
+    <!-- BEGIN FOOTER -->
+    <div class="footer" style="background-color: rgb(255, 255, 255);">
+        <div class="footer-button redlove" data-ng-show="state.actions" id="footer-button" style="display: block;">
+            <a type="button" id="uploadfiles" href="javascript:;" data-ng-click="state.convert(state.files)" class="btn black btn-xl"> Convert to PDF </a>
+        </div>
+        <div class="footer-inner " data-ng-show="!state.actions">
+            2017 &copy;</div>
+        <div class="footer-tools">
+
+        </div>
+    </div>
+    <div id="processingStatus" style="display: initial" data-ng-show="state.loader">
+        <div class="row">
+            <div id="waiting">
+                <span id="actionApp"></span> <br> <br>
+                <img src="/images/svg_icons/preload.svg">
+
+                <div id="waitnotify" class="alert alert-info"></div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

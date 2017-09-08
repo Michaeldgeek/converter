@@ -1,0 +1,83 @@
+var app = angular.module('myApp', ['ngFileUpload']);
+app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', function($scope, $document, Upload, $http) {
+    function State() {
+        var self = this;
+        this.preview = false;
+        this.actions = false;
+        this.loader = false;
+        this.files = [];
+        this.select = function() {
+            var element = $document[0].getElementById('file');
+            element.click();
+        };
+        this.reset = function() {
+            $scope.state.preview = false;
+            $scope.state.actions = false;
+            $scope.state.loader = false;
+        }
+        this.close = function(element, file) {
+            $(element).parent().remove();
+            if ($scope.state.files.length === 1) {
+                self.reset();
+            }
+            $scope.state.files.forEach(function(value, index, array) {
+                if (file === value) {
+                    array.splice(index, 1);
+                }
+            });
+        }
+        this.convert = function(files) {
+            var data = [];
+            files.forEach(function(file, index, array) {
+                data.push(file.name);
+            });
+
+            $http({
+                method: 'POST',
+                url: '/convert_to_pdf',
+                data: data,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                dataType: 'json'
+            }).then(function(success) {
+
+            }, function(err) {
+
+            });
+        }
+        this.uploadFiles = function(files, errFiles) {
+            $scope.files = files;
+            $scope.errFiles = errFiles;
+            angular.forEach(files, function(file) {
+                file.upload = Upload.upload({
+                    url: '/word_to_pdf',
+                    data: { file: file }
+                });
+                file.upload.then(function(success) {
+                    //file.result = success.data;
+                    if (success.data === "error") {
+                        alert("Check your network");
+                        $scope.state.loader = false;
+                        return;
+                    }
+                    $scope.state.preview = true;
+                    $scope.state.actions = true;
+                    $scope.state.loader = false;
+                    $scope.state.files.push(file);
+                }, function(error) {
+                    if (error.status === 404) {
+                        alert("Select a .docx file");
+                        $scope.state.loader = false;
+                    } else {
+                        alert("Check your network");
+                        $scope.state.loader = false;
+                    }
+                }, function(progress) {
+                    $scope.state.loader = true;
+                });
+            });
+        };
+    }
+    $scope.state = new State();
+}]);
