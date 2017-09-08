@@ -31,7 +31,8 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
             files.forEach(function(file, index, array) {
                 data.push(file.name);
             });
-
+            $scope.state.loader = true;
+            $scope.state.actions = false;
             $http({
                 method: 'POST',
                 url: '/convert_to_pdf',
@@ -42,10 +43,12 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                 responseType: 'blob',
                 dataType: 'json'
             }).then(function(success) {
+                $scope.state.loader = false;
                 var file = new Blob([success.data], { type: 'application/zip' });
                 saveAs(file, 'output.zip');
             }, function(err) {
-
+                $scope.state.loader = false;
+                alert('An error occured');
             });
         }
         this.uploadFiles = function(files, errFiles) {
