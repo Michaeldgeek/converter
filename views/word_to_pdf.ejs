@@ -118,7 +118,7 @@
                 <h2 class="page-subtitle">Make DOC and DOCX files easy to read by converting them to PDF.</h2>
                 <hr class="h1">
                 <div id="upload-container">
-                    <a type="button" class="btn redlove btn-xl" id="pickfiles" data-ng-click="state.select();" href="javascript:;">Select WORD file</a>
+                    <a type="button" class="btn redlove btn-xl" id="pickfiles" data-ng-if="!state.actions" data-ng-click="state.select();" href="javascript:;">Select WORD file</a>
                     <div class="exbu" style="visibility: hidden">
                         <a class="btn redlove btn-icon tooltips" id="gdrive_file_selector" onclick="onApiLoad();" data-placement="right" data-original-title="Select WORD from Google Drive">
                             <img src="/images/svg_icons/google-drive.svg" width="18px" onerror="this.src='/images/google-drive.png'; this.onerror=null;" alt="" />

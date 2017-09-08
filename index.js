@@ -59,32 +59,22 @@ app.post('/convert_to_pdf', jsonParser, function(req, res) {
         unoconv.convert(file.fullPath, 'pdf', function(err, result) {
             // result is returned as a Buffer
             fs.writeFileSync(file.writeTo, result);
-            convertedFiles.push(file.writeTo);
-            if (index === array.length - 1) {
-                sendOut(convertedFiles);
-            }
+            var output = fs.createWriteStream(__dirname + '/output.zip');
+            var archive = archiver('zip', {
+                gzip: true,
+                zlib: { level: 9 } // Sets the compression level.
+            });
+            archive.on('error', function(err) {
+                console.log(err);
+            });
+            output.on('close', function() {
+                res.download(__dirname + '/output.zip');
+            });
+            archive.pipe(output);
+            archive.append(fs.createReadStream(file.writeTo), { name: file.convertTo });
+            archive.finalize();
         });
     });
-
-    function sendOut(convertedFiles) {
-        var output = fs.createWriteStream(__dirname + '/output.zip');
-        var archive = archiver('zip', {
-            gzip: true,
-            zlib: { level: 9 } // Sets the compression level.
-        });
-
-        archive.on('error', function(err) {
-            console.log(err);
-        });
-        output.on('close', function() {
-            res.download(__dirname + '/output.zip');
-        });
-        archive.pipe(output);
-        convertedFiles.forEach(function(file, index, array) {
-            archive.append(fs.createReadStream(file), { name: file.split(config.TEMP)[1].trim() });
-        });
-        archive.finalize();
-    }
 
 });
 
