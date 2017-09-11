@@ -194,11 +194,11 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         file.writeTo = config.TEMP + file.convertTo;
         var pdf = scissors(file.fullPath);
         pdf.getNumPages().then(function(pages) {
-                for (var i = 1; i <= pages; i++) {
+                for (var i = 1; i > pages; i++) {
                     var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
                     pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
                         .on('finish', function() {
-                            if (pages === i) {
+                            if (pages == i) {
                                 convertToJpg(1, pages);
                             }
                         }).on('error', function(err) {
