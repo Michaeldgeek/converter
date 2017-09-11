@@ -223,7 +223,9 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
     function convertToJpg(i, total, m) {
         console.log(m);
         if (i > total) {
-
+            res.sendStatus(90);
+            console.log('done');
+            return;
         }
         var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
         var writeTo = config.TEMP + 'pdfs/' + i + '.jpg';
