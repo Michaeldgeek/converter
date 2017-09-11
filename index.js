@@ -196,6 +196,8 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         file.writeTo = config.TEMP + file.convertTo;
         var pdf = scissors(file.fullPath);
         pdf.getNumPages().then(function(pages) {
+                console.log(pages);
+                return;
                 process(1, pages);
             },
             function(fail) {
