@@ -197,7 +197,11 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                 for (var i = 1; i <= pages; i++) {
                     var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
                     pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
-                        .on('finish', function() {}).on('error', function(err) {
+                        .on('finish', function() {
+                            if (pages === i) {
+                                convertToJpg(1, pages);
+                            }
+                        }).on('error', function(err) {
                             console.log(err);
                         });
                 }
@@ -206,6 +210,19 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                 console.log(fail);
             });
     });
+
+    function convertToJpg(i, total) {
+        if (i > total) {
+            console.log('done');
+            return;
+        }
+        var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
+        var writeTo = config.TEMP + 'pdfs/' + i + '.jpg';
+        unoconv.convert(fullPath, 'jpg', function(err, result) {
+            fs.writeFileSync(writeTo, result);
+            convertToJpg(i + 1);
+        });
+    }
 
     function convert(fullPath, writeTo, convertTo, callback) {
         unoconv.convert(fullPath, 'jpg', function(err, result) {
