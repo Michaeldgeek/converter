@@ -185,7 +185,6 @@ app.post('/convert_to_pdf', jsonParser, function(req, res) {
 app.post('/convert_from_pdf', jsonParser, function(req, res) {
     var data = req.body;
     var convertedFiles = [];
-    console.log("con");
     data.forEach(function(element, index, array) {
         var file = {
 
@@ -194,10 +193,8 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         file.convertTo = element.split('.')[0].trim() + ".jpg";
         file.writeTo = config.TEMP + file.convertTo;
         var pdf = scissors(file.fullPath);
-        console.log("before");
         pdf.getNumPages().then(function(pages) {
-                console.log("after" + pages);
-                for (var i = 1; i > pages; i++) {
+                for (var i = 1; pages > i; i++) {
                     var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
                     console.log("in" + pages + ": " + i);
                     pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
