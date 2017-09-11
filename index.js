@@ -255,6 +255,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         append();
 
         function append() {
+            console.log(i + " " + total);
             if (i > total) {
                 console.log('out');
                 archive.finalize();
