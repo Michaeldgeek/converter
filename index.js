@@ -202,7 +202,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                     pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
                         .on('finish', function() {
                             console.log(pages + ": " + i);
-                            if (pages == i) {
+                            if (pages < i) {
                                 convertToJpg(1, pages, 'inn');
                             }
                         }).on('error', function(err) {
