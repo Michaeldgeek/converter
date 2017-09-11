@@ -239,6 +239,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
     }
 
     function archive(i, total, callback) {
+        console.log('archive');
         var output = fs.createWriteStream(__dirname + '/output.zip');
         var archive = archiver('zip', {
             gzip: true,
