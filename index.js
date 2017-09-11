@@ -220,7 +220,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
 
     function convertToJpg(i, total) {
         if (i > total) {
-            archive(function(result) {
+            archive(1, total, function(result) {
                 res.download(result);
             });
             return;
@@ -238,7 +238,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         });
     }
 
-    function archive(callback) {
+    function archive(i, total, callback) {
         var output = fs.createWriteStream(__dirname + '/output.zip');
         var archive = archiver('zip', {
             gzip: true,
@@ -251,22 +251,19 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             callback(__dirname + '/output.zip');
         });
         archive.pipe(output);
-        archive.append(fs.createReadStream(config.TEMP + 'pdfs/' + '1.jpg'), { name: '1.jpg' })
-            .on('data', function() {
-                console.log('data');
-                console.log(arguments);
-            }).on('end', function() {
-                console.log('end');
-                console.log(arguments);
-            }).on('close', function() {
-                console.log('close');
-                console.log(arguments);
-            }).on('readable', function() {
-                console.log('readable');
-                console.log(arguments);
-            });
-        console.log('out');
-        archive.finalize();
+        append();
+
+        function append() {
+            if (i > total) {
+                console.log('out');
+                archive.finalize();
+            }
+            archive.append(fs.createReadStream(config.TEMP + 'pdfs/' + i + '.jpg'), { name: i + '.jpg' })
+                .on('end', function() {
+                    i = i + 1;
+                    append();
+                });
+        }
     }
 
     function convert(fullPath, writeTo, convertTo, callback) {
