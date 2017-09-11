@@ -196,6 +196,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         pdf.getNumPages().then(function(pages) {
                 for (var i = 1; i > pages; i++) {
                     var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
+                    console.log("in" + pages + ": " + i);
                     pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
                         .on('finish', function() {
                             console.log(pages + ": " + i);
