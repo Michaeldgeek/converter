@@ -19,6 +19,8 @@ var app = express();
 app.use('/', express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
+
+unoconv.listen({ port: 2002 });
 app.get('/', function(req, res) {
     res.render('index');
 });
@@ -194,14 +196,14 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         file.writeTo = config.TEMP + file.convertTo;
         var pdf = scissors(file.fullPath);
         pdf.getNumPages().then(function(pages) {
-                for (var i = 1; pages >= i; i++) {
+                for (var i = 1; i <= pages; i++) {
                     var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
                     console.log("in" + pages + ": " + i);
                     pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
                         .on('finish', function() {
                             console.log(pages + ": " + i);
-                            if (pages < i) {
-                                convertToJpg(1, pages);
+                            if (pages == i) {
+                                convertToJpg(1, pages, 'inn');
                             }
                         }).on('error', function(err) {
                             console.log(err);
@@ -213,21 +215,21 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             });
     });
 
-    function convertToJpg(i, total) {
-        console.log('calles');
+    function convertToJpg(i, total, m) {
+        console.log(m);
         if (i > total) {
 
         }
         var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
         var writeTo = config.TEMP + 'pdfs/' + i + '.jpg';
-        unoconv.convert(fullPath, 'jpg', function(err, result) {
+        unoconv.convert(fullPath, 'jpg', { port: 2002 }, function(err, result) {
             if (err) {
                 console.log(err);
                 return;
             }
             fs.writeFileSync(writeTo, result);
             i = i + 1;
-            convertToJpg(i, total);
+            convertToJpg(i, total, "ooo");
         });
     }
 
