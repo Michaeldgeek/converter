@@ -195,16 +195,9 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         var pdf = scissors(file.fullPath);
         pdf.getNumPages().then(function(pages) {
                 for (var i = 1; i <= pages; i++) {
-                    var fullPath = config.TEMP + i + '.pdf';
-                    var convertTo = i + '.jpg';
-                    var writeTo = config.TEMP + convertTo;
+                    var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
                     pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
-                        .on('finish', function() {
-                            convert(fullPath, convertTo, writeTo, function(response) {
-                                res.download(response);
-                                return;
-                            });
-                        }).on('error', function(err) {
+                        .on('finish', function() {}).on('error', function(err) {
                             console.log(err);
                         });
                 }
@@ -212,8 +205,6 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             function(fail) {
                 console.log(fail);
             });
-        return;
-
     });
 
     function convert(fullPath, writeTo, convertTo, callback) {
