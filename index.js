@@ -193,15 +193,33 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         file.convertTo = element.split('.')[0].trim() + ".jpg";
         file.writeTo = config.TEMP + file.convertTo;
         var pdf = scissors(file.fullPath);
-        pdf.getNumPages().then(function(success) {
-            console.log(success);
-        }, function(fail) {
-            console.log(fail);
-        });
+        pdf.getNumPages().then(function(pages) {
+                for (var i = 1; i <= pages; i++) {
+                    var fullPath = config.TEMP + pages + '.pdf';
+                    var convertTo = pages + '.jpg';
+                    var writeTo = config.TEMP + convertTo;
+                    pdf.pages(pages).pdfStream().pipe(fs.createWriteStream(fullPath))
+                        .on('finish', function() {
+                            convert(fullPath, convertTo, writeTo, function(response) {
+                                res.download(response);
+                                return;
+                            });
+                        }).on('error', function(err) {
+                            throw err;
+                        });
+                }
+            },
+            function(fail) {
+                console.log(fail);
+            });
         return;
-        unoconv.convert(file.fullPath, 'jpg', function(err, result) {
+
+    });
+
+    function convert(fullPath, writeTo, convertTo, callback) {
+        unoconv.convert(fullPath, 'jpg', function(err, result) {
             // result is returned as a Buffer
-            fs.writeFileSync(file.writeTo, result);
+            fs.writeFileSync(writeTo, result);
             var output = fs.createWriteStream(__dirname + '/output.zip');
             var archive = archiver('zip', {
                 gzip: true,
@@ -211,13 +229,13 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                 console.log(err);
             });
             output.on('close', function() {
-                res.download(__dirname + '/output.zip');
+                callback(__dirname + '/output.zip');
             });
             archive.pipe(output);
-            archive.append(fs.createReadStream(file.writeTo), { name: file.convertTo });
+            archive.append(fs.createReadStream(writeTo), { name: convertTo });
             archive.finalize();
         });
-    });
+    }
 
 });
 
