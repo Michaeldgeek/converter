@@ -204,14 +204,12 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
 
         function process(i, pages) {
             if (pages < i) {
-                convertToJpg(1, pages, 'inn');
+                convertToJpg(1, pages);
                 return;
             }
             var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
-            console.log("in" + pages + ": " + i);
             pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
                 .on('finish', function() {
-                    console.log(pages + ": " + i);
                     i = i + 1;
                     process(i, pages);
                 }).on('error', function(err) {
@@ -220,11 +218,11 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         }
     });
 
-    function convertToJpg(i, total, m) {
-        console.log(m);
+    function convertToJpg(i, total) {
         if (i > total) {
-            console.log('done');
-            res.sendStatus(404);
+            archive(function(result) {
+                res.download(result);
+            });
             return;
         }
         var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
@@ -236,28 +234,47 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             }
             fs.writeFileSync(writeTo, result);
             i = i + 1;
-            convertToJpg(i, total, "ooo");
+            convertToJpg(i, total);
         });
+    }
+
+    function archive(callback) {
+        var output = fs.createWriteStream(__dirname + '/output.zip');
+        var archive = archiver('zip', {
+            gzip: true,
+            zlib: { level: 9 } // Sets the compression level.
+        });
+        archive.on('error', function(err) {
+            console.log(err);
+        });
+        output.on('close', function() {
+            callback(__dirname + '/output.zip');
+        });
+        archive.pipe(output);
+        archive.append(fs.createReadStream(config.TEMP + 'pdfs/' + '1.jpg'), { name: '1.jpg' })
+            .on('data', function() {
+                console.log('data');
+                console.log(arguments);
+            }).on('end', function() {
+                console.log('end');
+                console.log(arguments);
+            }).on('close', function() {
+                console.log('close');
+                console.log(arguments);
+            }).on('readable', function() {
+                console.log('readable');
+                console.log(arguments);
+            });
+        console.log('out');
+        archive.finalize();
     }
 
     function convert(fullPath, writeTo, convertTo, callback) {
         unoconv.convert(fullPath, 'jpg', function(err, result) {
             // result is returned as a Buffer
             fs.writeFileSync(writeTo, result);
-            var output = fs.createWriteStream(__dirname + '/output.zip');
-            var archive = archiver('zip', {
-                gzip: true,
-                zlib: { level: 9 } // Sets the compression level.
-            });
-            archive.on('error', function(err) {
-                console.log(err);
-            });
-            output.on('close', function() {
-                callback(__dirname + '/output.zip');
-            });
-            archive.pipe(output);
-            archive.append(fs.createReadStream(writeTo), { name: convertTo });
-            archive.finalize();
+
+
         });
     }
 
