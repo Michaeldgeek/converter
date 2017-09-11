@@ -220,7 +220,8 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         var writeTo = config.TEMP + 'pdfs/' + i + '.jpg';
         unoconv.convert(fullPath, 'jpg', function(err, result) {
             fs.writeFileSync(writeTo, result);
-            convertToJpg(i + 1);
+            i = i + 1;
+            convertToJpg(i, total);
         });
     }
 
