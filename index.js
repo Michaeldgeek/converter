@@ -34,6 +34,10 @@ app.get('/powerpoint_to_pdf', function(req, res) {
     res.render('powerpoint_to_pdf');
 });
 
+app.get('/excel_to_pdf', function(req, res) {
+    res.render('excel_to_pdf');
+});
+
 app.post('/word_to_pdf', multipartyMiddleware, function(req, res) {
     fs.readFile(req.files.file.path, function(err, data) {
         var file = req.files.file;
@@ -62,6 +66,27 @@ app.post('/powerpoint_to_pdf', multipartyMiddleware, function(req, res) {
         if ((file.type !== 'application/vnd.ms-powerpoint' && file.type !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation') && (file.type !== '.ppt' && file.type !== '.pptx')) {
             res.status(404);
             res.send("Select a powerpoint file");
+            return;
+        }
+        fs.writeFile(file.fullPath, data, function(err) {
+            if (err) {
+                console.log(err);
+                res.send('error');
+                return;
+            }
+            res.send('ok');
+        });
+
+    });
+});
+
+app.post('/excel_to_pdf', multipartyMiddleware, function(req, res) {
+    fs.readFile(req.files.file.path, function(err, data) {
+        var file = req.files.file;
+        file.fullPath = config.TEMP + file.name;
+        if ((file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' && file.type !== 'application/vnd.ms-excel') && (file.type !== '.xlsx' && file.type !== '.xls')) {
+            res.status(404);
+            res.send(file.type);
             return;
         }
         fs.writeFile(file.fullPath, data, function(err) {

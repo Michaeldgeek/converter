@@ -8,7 +8,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Online PDF tools | Power Point to PDF</title>
+    <title>Online PDF tools | Excel to PDF</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="content-language" content="en_EN" />
     <link href="/css/love13.css" rel="stylesheet" type="text/css" />
@@ -102,7 +102,7 @@
 
         <!-- BEGIN PAGE -->
         <div class="page-content">
-            <span style="display: none" data-ng-init="url = '/powerpoint_to_pdf'"></span>
+            <span style="display: none" data-ng-init="url = '/excel_to_pdf'"></span>
             <div class="col-md-12">
                 <div class="btn-group views" data-toggle="buttons">
                     <label onclick="changeToGridview();" id="gridView" class="btn btn-default tooltips" data-placement="bottom" data-original-title="Change to cover view mode">
@@ -114,12 +114,12 @@
                 </div>
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h1 class="page-title tool">
-                    Convert Power Point to PDF </h1>
+                    Convert Excel to PDF </h1>
 
-                <h2 class="page-subtitle">Make Power Point files easy to read by converting them to PDF.</h2>
+                <h2 class="page-subtitle">Make Excel files easy to read by converting them to PDF.</h2>
                 <hr class="h1">
                 <div id="upload-container">
-                    <a type="button" class="btn redlove btn-xl" id="pickfiles" data-ng-if="!state.actions" data-ng-click="state.select();" href="javascript:;">Select Power Point file</a>
+                    <a type="button" class="btn redlove btn-xl" id="pickfiles" data-ng-if="!state.actions" data-ng-click="state.select();" href="javascript:;">Select Excel file</a>
                     <div class="exbu" style="visibility: hidden">
                         <a class="btn redlove btn-icon tooltips" id="gdrive_file_selector" onclick="onApiLoad();" data-placement="right" data-original-title="Select WORD from Google Drive">
                             <img src="/images/svg_icons/google-drive.svg" width="18px" onerror="this.src='/images/google-drive.png'; this.onerror=null;" alt="" />
@@ -134,7 +134,7 @@
             </div>
 
             <div id="fileGroups" class="margin-top-20" data-ng-show="state.preview">
-                <div class="file tooltips powerpointpdf" data-ng-repeat="file in state.files" rel="user" data-placement="top" data-original-title="17 KB">
+                <div class="file tooltips excelpdf" data-ng-repeat="file in state.files" rel="user" data-placement="top" data-original-title="17 KB">
                     <a class="btn btn-icon-only grey remove tooltips " data-ng-click="state.close($event.currentTarget,file)" style="display: initial" data-placement="top" data-original-title="Remove this file">
                         <i class="fa fa-times"></i>
                     </a>
@@ -145,7 +145,7 @@
                 </div>
             </div>
             <form class="hide">
-                <input id="file" type="file" ngf-select="state.uploadFiles($files, $invalidFiles)" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint,.ppt, .pptx" />
+                <input id="file" type="file" ngf-select="state.uploadFiles($files, $invalidFiles)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.xlsx, .xls" />
             </form>
             <!-- END PAGE CONTENT-->
         </div>
