@@ -10,6 +10,7 @@ const zlib = require('zlib');
 const gzip = zlib.createGzip();
 var multipartyMiddleware = multiparty();
 var archiver = require('archiver');
+var scissors = require('scissors');
 var port = process.env.PORT || config.PORT;
 var app = express();
 
@@ -191,6 +192,13 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         file.fullPath = config.TEMP + element;
         file.convertTo = element.split('.')[0].trim() + ".jpg";
         file.writeTo = config.TEMP + file.convertTo;
+        var pdf = scissors(file.fullPath);
+        pdf.getNumPages().then(function(success) {
+            console.log(success);
+        }, function(fail) {
+            console.log(fail);
+        });
+        return;
         unoconv.convert(file.fullPath, 'jpg', function(err, result) {
             // result is returned as a Buffer
             fs.writeFileSync(file.writeTo, result);
