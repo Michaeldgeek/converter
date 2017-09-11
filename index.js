@@ -196,23 +196,28 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         file.writeTo = config.TEMP + file.convertTo;
         var pdf = scissors(file.fullPath);
         pdf.getNumPages().then(function(pages) {
-                for (var i = 1; i <= pages; i++) {
-                    var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
-                    console.log("in" + pages + ": " + i);
-                    pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
-                        .on('finish', function() {
-                            console.log(pages + ": " + i);
-                            if (pages < i) {
-                                convertToJpg(1, pages, 'inn');
-                            }
-                        }).on('error', function(err) {
-                            console.log(err);
-                        });
-                }
+                process(1, pages);
             },
             function(fail) {
                 console.log(fail);
             });
+
+        function process(i, pages) {
+            if (pages < i) {
+                convertToJpg(1, pages, 'inn');
+                return;
+            }
+            var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
+            console.log("in" + pages + ": " + i);
+            pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
+                .on('finish', function() {
+                    console.log(pages + ": " + i);
+                    i = i + 1;
+                    process(i, pages);
+                }).on('error', function(err) {
+                    console.log(err);
+                });
+        }
     });
 
     function convertToJpg(i, total, m) {
