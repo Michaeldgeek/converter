@@ -211,6 +211,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
                 .on('finish', function() {
                     i = i + 1;
+                    console.log(i);
                     process(i, pages);
                 }).on('error', function(err) {
                     console.log("err");
