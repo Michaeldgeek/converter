@@ -199,7 +199,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                 process(1, pages);
             },
             function(fail) {
-                console.log(fail);
+                console.log('fail');
             });
 
         function process(i, pages) {
@@ -213,7 +213,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                     i = i + 1;
                     process(i, pages);
                 }).on('error', function(err) {
-                    console.log(err);
+                    console.log("err");
                 });
         }
     });
