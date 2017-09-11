@@ -199,7 +199,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                 process(1, pages);
             },
             function(fail) {
-                console.log('fail');
+                console.log(fail);
             });
 
         function process(i, pages) {
@@ -207,6 +207,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                 convertToJpg(1, pages);
                 return;
             }
+            var pdf = scissors(file.fullPath);
             var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
             pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
                 .on('finish', function() {
@@ -214,7 +215,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                     console.log(i);
                     process(i, pages);
                 }).on('error', function(err) {
-                    console.log("err");
+                    console.log(err);
                 });
         }
     });
