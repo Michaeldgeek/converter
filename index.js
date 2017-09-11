@@ -195,10 +195,10 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         var pdf = scissors(file.fullPath);
         pdf.getNumPages().then(function(pages) {
                 for (var i = 1; i <= pages; i++) {
-                    var fullPath = config.TEMP + pages + '.pdf';
-                    var convertTo = pages + '.jpg';
+                    var fullPath = config.TEMP + i + '.pdf';
+                    var convertTo = i + '.jpg';
                     var writeTo = config.TEMP + convertTo;
-                    pdf.pages(pages).pdfStream().pipe(fs.createWriteStream(fullPath))
+                    pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
                         .on('finish', function() {
                             convert(fullPath, convertTo, writeTo, function(response) {
                                 res.download(response);
