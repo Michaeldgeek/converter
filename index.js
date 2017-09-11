@@ -189,7 +189,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
 
         };
         file.fullPath = config.TEMP + element;
-        file.convertTo = element.split('.')[0].trim() + ".pdf";
+        file.convertTo = element.split('.')[0].trim() + ".jpg";
         file.writeTo = config.TEMP + file.convertTo;
         unoconv.convert(file.fullPath, 'jpg', function(err, result) {
             // result is returned as a Buffer
