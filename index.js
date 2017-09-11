@@ -205,7 +205,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                                 return;
                             });
                         }).on('error', function(err) {
-                            throw err;
+                            console.log(err);
                         });
                 }
             },
