@@ -13,8 +13,8 @@ var archiver = require('archiver');
 var port = process.env.PORT || config.PORT;
 var app = express();
 
-app.use(compression());
-app.use(minify());
+//app.use(compression());
+//app.use(minify());
 app.use('/', express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
@@ -26,12 +26,21 @@ app.get('/word_to_pdf', function(req, res) {
     res.render('word_to_pdf');
 });
 
+app.get('/jpg_to_pdf', function(req, res) {
+    res.render('jpg_to_pdf');
+});
+
+app.get('/powerpoint_to_pdf', function(req, res) {
+    res.render('powerpoint_to_pdf');
+});
+
 app.post('/word_to_pdf', multipartyMiddleware, function(req, res) {
     fs.readFile(req.files.file.path, function(err, data) {
         var file = req.files.file;
         file.fullPath = config.TEMP + file.name;
         if (file.type !== 'application/msword' && file.type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-            res.sendStatus(404);
+            res.status(404);
+            res.send("Select a docx file");
             return;
         }
         fs.writeFile(file.fullPath, data, function(err) {
@@ -45,6 +54,50 @@ app.post('/word_to_pdf', multipartyMiddleware, function(req, res) {
 
     });
 });
+
+app.post('/powerpoint_to_pdf', multipartyMiddleware, function(req, res) {
+    fs.readFile(req.files.file.path, function(err, data) {
+        var file = req.files.file;
+        file.fullPath = config.TEMP + file.name;
+        if ((file.type !== 'application/vnd.ms-powerpoint' && file.type !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation') && (file.type !== '.ppt' && file.type !== '.pptx')) {
+            res.status(404);
+            res.send("Select a powerpoint file");
+            return;
+        }
+        fs.writeFile(file.fullPath, data, function(err) {
+            if (err) {
+                console.log(err);
+                res.send('error');
+                return;
+            }
+            res.send('ok');
+        });
+
+    });
+});
+
+app.post('/jpg_to_pdf', multipartyMiddleware, function(req, res) {
+    fs.readFile(req.files.file.path, function(err, data) {
+        var file = req.files.file;
+        file.fullPath = config.TEMP + file.name;
+        file.type = file.type.toLowerCase();
+        if (file.type !== 'image/jpg' && (file.type !== 'image/jpeg' && file.type !== 'image/png')) {
+            res.status(404);
+            res.send("Select an image  file");
+            return;
+        }
+        fs.writeFile(file.fullPath, data, function(err) {
+            if (err) {
+                console.log(err);
+                res.send('error');
+                return;
+            }
+            res.send('ok');
+        });
+
+    });
+});
+
 var jsonParser = bodyParser.json()
 app.post('/convert_to_pdf', jsonParser, function(req, res) {
     var data = req.body;

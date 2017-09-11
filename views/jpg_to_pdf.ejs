@@ -8,7 +8,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Online PDF tools | Word to PDF</title>
+    <title>Online PDF tools | JPEG to PDF</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="content-language" content="en_EN" />
     <link href="/css/love13.css" rel="stylesheet" type="text/css" />
@@ -102,7 +102,6 @@
 
         <!-- BEGIN PAGE -->
         <div class="page-content">
-            <span style="display: none" data-ng-init="url = '/word_to_pdf'"></span>
             <div class="col-md-12">
                 <div class="btn-group views" data-toggle="buttons">
                     <label onclick="changeToGridview();" id="gridView" class="btn btn-default tooltips" data-placement="bottom" data-original-title="Change to cover view mode">
@@ -114,12 +113,12 @@
                 </div>
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h1 class="page-title tool">
-                    Convert WORD to PDF </h1>
-
-                <h2 class="page-subtitle">Make DOC and DOCX files easy to read by converting them to PDF.</h2>
+                    Convert JPG to PDF </h1>
+                <span style="display: none" data-ng-init="url = '/jpg_to_pdf'"></span>
+                <h2 class="page-subtitle">Make JPG and JPEG files easy to read by converting them to PDF.</h2>
                 <hr class="h1">
                 <div id="upload-container">
-                    <a type="button" class="btn redlove btn-xl" id="pickfiles" data-ng-if="!state.actions" data-ng-click="state.select();" href="javascript:;">Select WORD file</a>
+                    <a type="button" class="btn redlove btn-xl" id="pickfiles" data-ng-if="!state.actions" data-ng-click="state.select();" href="javascript:;">Select JPEG file</a>
                     <div class="exbu" style="visibility: hidden">
                         <a class="btn redlove btn-icon tooltips" id="gdrive_file_selector" onclick="onApiLoad();" data-placement="right" data-original-title="Select WORD from Google Drive">
                             <img src="/images/svg_icons/google-drive.svg" width="18px" onerror="this.src='/images/google-drive.png'; this.onerror=null;" alt="" />
@@ -134,19 +133,18 @@
             </div>
 
             <div id="fileGroups" class="margin-top-20" data-ng-show="state.preview">
-                <div class="file tooltips wordpdf" data-ng-repeat="file in state.files" rel="user" data-placement="top" data-original-title="17 KB">
+                <div class="file tooltips " data-ng-repeat="file in state.files" rel="user" data-placement="top" data-original-title="17 KB">
                     <a class="btn btn-icon-only grey remove tooltips " data-ng-click="state.close($event.currentTarget,file)" style="display: initial" data-placement="top" data-original-title="Remove this file">
                         <i class="fa fa-times"></i>
                     </a>
-                    <canvas class="covercanvas" id="cover-o_1bp1f5n7s1sk32t31gqj1u341b6ha" width="150" height="212"></canvas>
-                    <div class="fileInfo">
+                    <img id="imageCanvas" width="250" height="250" style='width: 250px; height: 250px' ngf-src="file" ngf-background="file" ngf-no-object-url="false" ngf-fix-orientation="true" />
+                    <div class="fileInfo" style="margin-top: 0">
                         <span class="filename" style="margin-left: auto; word-wrap: break-word">{{file.name}}</span>
                     </div>
                 </div>
             </div>
             <form class="hide">
-                <input id="file" type="file" ngf-select="state.uploadFiles($files, $invalidFiles)" accept="application/msword,
-                application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+                <input id="file" type="file" ngf-select="state.uploadFiles($files, $invalidFiles)" accept="image/jpeg, image/jpg,image/png" />
             </form>
             <!-- END PAGE CONTENT-->
         </div>

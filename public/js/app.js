@@ -56,7 +56,7 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
             $scope.errFiles = errFiles;
             angular.forEach(files, function(file) {
                 file.upload = Upload.upload({
-                    url: '/word_to_pdf',
+                    url: $scope.url,
                     data: { file: file }
                 });
                 file.upload.then(function(success) {
@@ -70,10 +70,12 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                     $scope.state.actions = true;
                     $scope.state.loader = false;
                     $scope.state.files.push(file);
+                    console.log(file);
                 }, function(error) {
                     if (error.status === 404) {
-                        alert("Select a .docx file");
+                        alert(error.data);
                         $scope.state.loader = false;
+                        return;
                     } else {
                         alert("Check your network");
                         $scope.state.loader = false;
