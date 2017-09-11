@@ -212,6 +212,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
     });
 
     function convertToJpg(i, total) {
+        console.log('called');
         if (i > total) {
             console.log('done');
             return;
@@ -219,6 +220,10 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
         var writeTo = config.TEMP + 'pdfs/' + i + '.jpg';
         unoconv.convert(fullPath, 'jpg', function(err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            }
             fs.writeFileSync(writeTo, result);
             i = i + 1;
             convertToJpg(i, total);
