@@ -263,6 +263,9 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                 .on('end', function() {
                     i = i + 1;
                     append();
+                })
+                .on('error', function(error) {
+                    console.log(error);
                 });
         }
     }
