@@ -49,7 +49,7 @@ app.get('/pdf_to_jpg', function(req, res) {
     res.render('pdf_to_jpg');
 });
 
-app.get('/download', function(req, res) {
+app.post('/download', function(req, res) {
     var response = fs.existsSync('./output.zip');
     if (response) {
         res.download('./output.zip');
