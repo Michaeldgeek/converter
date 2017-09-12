@@ -16,7 +16,7 @@ var pdf2img = require('pdf2img');
 var port = process.env.PORT || config.PORT;
 var app = express();
 
-var input = __dirname + '/temp/1.pdf';
+var input = __dirname + '/temp/pdfs/1.pdf';
 
 pdf2img.setOptions({
     type: 'jpg', // png or jpg, default jpg 
