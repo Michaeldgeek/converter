@@ -14,6 +14,7 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
             $scope.state.preview = false;
             $scope.state.actions = false;
             $scope.state.loader = false;
+            $scope.state.download = false;
         }
         this.close = function(element, file) {
             $(element).parent().remove();
@@ -24,9 +25,7 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                 if (file === value) {
                     array.splice(index, 1);
                 }
-                if (index == array.length - 1) {
-                    self.reset();
-                }
+
             });
         }
         this.convert = function(files) {
@@ -36,6 +35,7 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
             });
             $scope.state.loader = true;
             $scope.state.actions = false;
+            $scope.state.download = false;
             $http({
                 method: 'POST',
                 url: '/convert_from_pdf',
