@@ -223,7 +223,7 @@ app.post('/convert_to_pdf', jsonParser, function(req, res) {
 
 });
 
-app.post('/convert_to_pdf_word', jsonParser, function(req, res) {
+app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
     var data = req.body;
     var convertedFiles = [];
     data.forEach(function(element, index, array) {
