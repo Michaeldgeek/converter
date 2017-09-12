@@ -232,7 +232,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             callback(__dirname + '/output.zip');
         });
         archive.pipe(output);
-        archive.directory(directory);
+        archive.directory(directory, true);
         archive.finalize();
     }
 });
