@@ -205,7 +205,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             outputdir: config.TEMP + 'pdfs', // output folder, default null (if null given, then it will create folder name same as file name) 
             page: null // convert selected page, default null (if null given, then it will convert all pages) 
         });
-        rmdir(config.TEMP, function(err, dirs, files) {
+        rmdir(config.TEMP + "pdfs/", function(err, dirs, files) {
             pdf2img.convert(file.fullPath, function(err, info) {
                 if (err) {
                     console.log(err);
