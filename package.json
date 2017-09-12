@@ -19,9 +19,11 @@
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "express-minify": "^1.0.0",
+    "hummus": "^1.0.81",
     "jquery": "^3.2.1",
     "mysql": "^2.14.1",
     "ng-file-upload": "^12.2.13",
+    "pdf2img": "^0.5.0",
     "scissors": "^0.2.3",
     "unoconv": "^0.1.2",
     "unoconv2": "^1.0.0"

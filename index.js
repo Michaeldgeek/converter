@@ -11,11 +11,26 @@ const gzip = zlib.createGzip();
 var multipartyMiddleware = multiparty();
 var archiver = require('archiver');
 var scissors = require('scissors');
+var hummus = require('hummus');
+var pdf2img = require('pdf2img');
 var port = process.env.PORT || config.PORT;
 var app = express();
 
-//app.use(compression());
-//app.use(minify());
+var input = __dirname + '/temp/1.pdf';
+
+pdf2img.setOptions({
+    type: 'jpg', // png or jpg, default jpg 
+    size: 1024, // default 1024 
+    density: 600 // default 600                                // convert selected page, default null (if null given, then it will convert all pages) 
+});
+
+pdf2img.convert(input, function(err, info) {
+    if (err) console.log(err)
+    else console.log(info);
+});
+return;
+app.use(compression());
+app.use(minify());
 app.use('/', express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
@@ -208,6 +223,7 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
                 return;
             }
             var pdf = scissors(file.fullPath);
+
             var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
             pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
                 .on('finish', function() {
