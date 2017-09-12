@@ -24,6 +24,9 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                 if (file === value) {
                     array.splice(index, 1);
                 }
+                if (index == array.length - 1) {
+                    self.reset();
+                }
             });
         }
         this.convert = function(files) {
@@ -52,7 +55,7 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                 alert('An error occured');
             });
         }
-        this.download = function() {
+        this.downloadZip = function() {
             $scope.state.loader = true;
             $scope.state.actions = false;
             $http({
