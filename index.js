@@ -205,21 +205,20 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             outputdir: config.TEMP + 'pdfs', // output folder, default null (if null given, then it will create folder name same as file name) 
             page: null // convert selected page, default null (if null given, then it will convert all pages) 
         });
-        rmdir(config.TEMP + "pdfs/", function(err, dirs, files) {
-            pdf2img.convert(file.fullPath, function(err, info) {
-                if (err) {
-                    console.log(err);
-                    res.status(404);
-                    res.send('An error occured');
-                    return;
-                } else {
-                    archive(config.TEMP + "pdfs/", function(result) {
-                        res.download(result);
-                    });
-                };
-            });
-        });
 
+        pdf2img.convert(file.fullPath, function(err, info) {
+            if (err) {
+                console.log(err);
+                res.status(404);
+                res.send('An error occured');
+                return;
+            } else {
+                archive(config.TEMP + "pdfs/", function(result) {
+                    res.download(result);
+                    rmdir(config.TEMP + "pdfs/", function(err, dirs, files) {});
+                });
+            };
+        });
     });
 
     function archive(directory, callback) {
