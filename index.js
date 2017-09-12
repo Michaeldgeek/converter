@@ -13,6 +13,7 @@ var archiver = require('archiver');
 var scissors = require('scissors');
 var hummus = require('hummus');
 var pdf2img = require('pdf2img');
+var rmdir = require('rmdir');
 var port = process.env.PORT || config.PORT;
 var app = express();
 
@@ -204,18 +205,21 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             outputdir: config.TEMP + 'pdfs', // output folder, default null (if null given, then it will create folder name same as file name) 
             page: null // convert selected page, default null (if null given, then it will convert all pages) 
         });
-        pdf2img.convert(file.fullPath, function(err, info) {
-            if (err) {
-                console.log(err);
-                res.status(404);
-                res.send('An error occured');
-                return;
-            } else {
-                archive(config.TEMP + "pdfs/", function(result) {
-                    res.download(result);
-                });
-            };
+        rmdir(config.TEMP, function(err, dirs, files) {
+            pdf2img.convert(file.fullPath, function(err, info) {
+                if (err) {
+                    console.log(err);
+                    res.status(404);
+                    res.send('An error occured');
+                    return;
+                } else {
+                    archive(config.TEMP + "pdfs/", function(result) {
+                        res.download(result);
+                    });
+                };
+            });
         });
+
     });
 
     function archive(directory, callback) {
