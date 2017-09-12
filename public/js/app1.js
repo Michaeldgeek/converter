@@ -43,6 +43,7 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                 responseType: 'blob',
                 dataType: 'json'
             }).then(function(success) {
+                $scope.state.download = true;
                 $scope.state.loader = false;
                 var file = new Blob([success.data], { type: 'application/zip' });
                 saveAs(file, 'output.zip');
@@ -86,7 +87,6 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                     $scope.state.actions = true;
                     $scope.state.loader = false;
                     $scope.state.files.push(file);
-                    console.log(file);
                 }, function(error) {
                     if (error.status === 404) {
                         alert(error.data);

@@ -158,8 +158,8 @@
         <div class="footer-button redlove" data-ng-show="state.actions" id="footer-button" style="display: block;">
             <a type="button" id="uploadfiles" href="javascript:;" data-ng-click="state.convert(state.files)" class="btn black btn-xl"> Convert to JPG </a>
         </div>
-        <div class="footer-button redlove" data-ng-show="!state.actions" id="footer-button" style="display: block;">
-            <a type="button" id="uploadfiles" href="javascript:;" data-ng-click="state.download())" class="btn black btn-xl"> Download </a>
+        <div class="footer-button redlove" data-ng-show="((state.download === true) && (state.actions == false))" id="footer-button" style="display: block;">
+            <a type="button" id="uploadfiles" href="javascript:;" data-ng-click="state.download()" class="btn black btn-xl"> Download </a>
         </div>
 
         <div class="footer-tools">
