@@ -51,6 +51,22 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                 alert('An error occured');
             });
         }
+        this.download = function() {
+            $scope.state.loader = true;
+            $scope.state.actions = false;
+            $http({
+                method: 'POST',
+                url: '/download',
+                responseType: 'blob'
+            }).then(function(success) {
+                $scope.state.loader = false;
+                var file = new Blob([success.data], { type: 'application/zip' });
+                saveAs(file, 'output.zip');
+            }, function(err) {
+                $scope.state.loader = false;
+                alert('File no longer exist');
+            });
+        }
         this.uploadFiles = function(files, errFiles) {
             $scope.files = files;
             $scope.errFiles = errFiles;

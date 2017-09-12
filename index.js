@@ -49,6 +49,16 @@ app.get('/pdf_to_jpg', function(req, res) {
     res.render('pdf_to_jpg');
 });
 
+app.get('/download', function(req, res) {
+    var response = fs.existsSync('./output.zip');
+    if (response) {
+        res.download('./output.zip');
+    } else {
+        res.status(404);
+        res.send('error');
+    }
+});
+
 app.post('/word_to_pdf', multipartyMiddleware, function(req, res) {
     fs.readFile(req.files.file.path, function(err, data) {
         var file = req.files.file;
