@@ -16,19 +16,7 @@ var pdf2img = require('pdf2img');
 var port = process.env.PORT || config.PORT;
 var app = express();
 
-var input = __dirname + '/temp/SAHS Brief_about_Company.pdf';
 
-pdf2img.setOptions({
-    type: 'jpg', // png or jpg, default jpg 
-    size: 1024, // default 1024 
-    density: 600 // default 600                                // convert selected page, default null (if null given, then it will convert all pages) 
-});
-
-pdf2img.convert(input, function(err, info) {
-    if (err) console.log(err)
-    else console.log(info);
-});
-return;
 app.use(compression());
 app.use(minify());
 app.use('/', express.static(__dirname + '/public'));
@@ -209,55 +197,29 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
         file.fullPath = config.TEMP + element;
         file.convertTo = element.split('.')[0].trim() + ".jpg";
         file.writeTo = config.TEMP + file.convertTo;
-        var pdf = scissors(file.fullPath);
-        pdf.getNumPages().then(function(pages) {
-                process(1, pages);
-            },
-            function(fail) {
-                console.log(fail);
-            });
-
-        function process(i, pages) {
-            if (pages < i) {
-                convertToJpg(1, pages);
-                return;
-            }
-            var pdf = scissors(file.fullPath);
-
-            var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
-            pdf.pages(i).pdfStream().pipe(fs.createWriteStream(fullPath))
-                .on('finish', function() {
-                    i = i + 1;
-                    console.log(i);
-                    process(i, pages);
-                }).on('error', function(err) {
-                    console.log(err);
-                });
-        }
-    });
-
-    function convertToJpg(i, total) {
-        if (i > total) {
-            archive(total, function(result) {
-                res.download(result);
-            });
-            return;
-        }
-        var fullPath = config.TEMP + 'pdfs/' + i + '.pdf';
-        var writeTo = config.TEMP + 'pdfs/' + i + '.jpg';
-        unoconv.convert(fullPath, 'jpg', { port: 2002 }, function(err, result) {
+        pdf2img.setOptions({
+            type: 'jpg', // png or jpg, default jpg 
+            size: 1024, // default 1024 
+            density: 600, // default 600 
+            outputdir: config.TEMP + 'pdfs', // output folder, default null (if null given, then it will create folder name same as file name) 
+            outputname: 'result', // output file name, dafault null (if null given, then it will create image name same as input name) 
+            page: null // convert selected page, default null (if null given, then it will convert all pages) 
+        });
+        pdf2img.convert(file.fullPath, function(err, info) {
             if (err) {
                 console.log(err);
+                res.status(404);
+                res.send('An error occured');
                 return;
-            }
-            fs.writeFileSync(writeTo, result);
-            i = i + 1;
-            convertToJpg(i, total);
+            } else {
+                archive(config.TEMP + "pdfs/", function(result) {
+                    res.download(result);
+                });
+            };
         });
-    }
+    });
 
-    function archive(total, callback) {
-        console.log('archive');
+    function archive(directory, callback) {
         var output = fs.createWriteStream(__dirname + '/output.zip');
         var archive = archiver('zip', {
             gzip: true,
@@ -270,21 +232,9 @@ app.post('/convert_from_pdf', jsonParser, function(req, res) {
             callback(__dirname + '/output.zip');
         });
         archive.pipe(output);
-        for (i = 1; i <= total; i++) {
-            archive.append(fs.createReadStream(config.TEMP + 'pdfs/' + i + '.jpg'), { name: i + '.jpg' })
-        }
+        archive.directory(directory);
         archive.finalize();
     }
-
-    function convert(fullPath, writeTo, convertTo, callback) {
-        unoconv.convert(fullPath, 'jpg', function(err, result) {
-            // result is returned as a Buffer
-            fs.writeFileSync(writeTo, result);
-
-
-        });
-    }
-
 });
 
 
