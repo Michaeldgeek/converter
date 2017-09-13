@@ -14,6 +14,7 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
             $scope.state.preview = false;
             $scope.state.actions = false;
             $scope.state.loader = false;
+            $scope.state.download = false;
         }
         this.close = function(element, file) {
             $(element).parent().remove();
@@ -33,6 +34,7 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
             });
             $scope.state.loader = true;
             $scope.state.actions = false;
+            $scope.state.download = false;
             $http({
                 method: 'POST',
                 url: '/convert_to_pdf',
@@ -43,12 +45,29 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
                 responseType: 'blob',
                 dataType: 'json'
             }).then(function(success) {
+                $scope.state.download = true;
                 $scope.state.loader = false;
                 var file = new Blob([success.data], { type: 'application/zip' });
                 saveAs(file, 'output.zip');
             }, function(err) {
                 $scope.state.loader = false;
                 alert('An error occured');
+            });
+        }
+        this.downloadZip = function() {
+            $scope.state.loader = true;
+            $scope.state.actions = false;
+            $http({
+                method: 'POST',
+                url: '/download',
+                responseType: 'blob'
+            }).then(function(success) {
+                $scope.state.loader = false;
+                var file = new Blob([success.data], { type: 'application/zip' });
+                saveAs(file, 'output.zip');
+            }, function(err) {
+                $scope.state.loader = false;
+                alert('File no longer exist');
             });
         }
         this.uploadFiles = function(files, errFiles) {

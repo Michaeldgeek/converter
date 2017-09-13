@@ -14,9 +14,9 @@ var scissors = require('scissors');
 var hummus = require('hummus');
 var pdf2img = require('pdf2img');
 var rmdir = require('rmdir');
+var HtmlDocx = require('html-docx-js');
 var port = process.env.PORT || config.PORT;
 var app = express();
-
 
 app.use(compression());
 app.use(minify());
@@ -24,7 +24,7 @@ app.use('/', express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
 
-//unoconv.listen({ port: 2002 });
+unoconv.listen({ port: 2002 });
 app.get('/', function(req, res) {
     res.render('index');
 });
@@ -201,7 +201,7 @@ app.post('/convert_to_pdf', jsonParser, function(req, res) {
         file.fullPath = config.TEMP + element;
         file.convertTo = element.split('.')[0].trim() + ".pdf";
         file.writeTo = config.TEMP + file.convertTo;
-        unoconv.convert(file.fullPath, 'pdf', function(err, result) {
+        unoconv.convert(file.fullPath, 'pdf', { port: 2002 }, function(err, result) {
             // result is returned as a Buffer
             fs.writeFileSync(file.writeTo, result);
             var output = fs.createWriteStream(__dirname + '/output.zip');
@@ -233,7 +233,7 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
         file.fullPath = config.TEMP + element;
         file.convertTo = element.split('.')[0].trim() + ".docx";
         file.writeTo = config.TEMP + file.convertTo;
-        unoconv.convert(file.fullPath, 'docx', function(err, result) {
+        unoconv.convert(file.fullPath, 'docx', { port: 2002 }, function(err, result) {
             // result is returned as a Buffer
             fs.writeFileSync(file.writeTo, result);
             var output = fs.createWriteStream(__dirname + '/output.zip');
