@@ -1,6 +1,6 @@
 var config = {
     TEMP: './temp/',
-    PORT: '3000'
+    PORT: '80'
 };
 
 module.exports = config;
