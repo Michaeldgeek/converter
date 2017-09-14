@@ -246,6 +246,8 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
             }
             element = element.replace(/\s/g, '');
             file.fullPath = config.TEMP + element;
+            file.convertTo = element.split('.')[0].trim() + ".docx";
+            file.writeTo = config.TEMP + file.convertTo;
             var code = shell.exec('sudo mv /var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '').code;
             if (code !== 0) {
                 res.status(404);
@@ -253,21 +255,8 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
                 console.log(err);
                 return;
             }
-            var code = shell.exec("sudo /snap/bin/libreoffice --infilter='writer_pdf_import' --convert-to doc '" + config.LIBRE_OFFICE_PATH + element + "' --outdir /var/www/converter/temp").code;
-            console.log(code);
-
-        });
-        return;
-
-        mv('/var/www/converter/temp/' + element, config.LIBRE_OFFICE_PATH, function(err) {
-            if (err) {
-                console.log(err);
-
-                return;
-            }
-            console.log(done);
+            var code = shell.exec("sudo /snap/bin/libreoffice --infilter='writer_pdf_import' --convert-to doc '" + config.LIBRE_OFFICE_PATH + element + "'").code;
             return;
-            var output = fs.createWriteStream(__dirname + '/output.zip');
             var archive = archiver('zip', {
                 gzip: true,
                 zlib: { level: 9 } // Sets the compression level.
@@ -282,6 +271,7 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
             archive.append(fs.createReadStream(file.writeTo), { name: file.convertTo });
             archive.finalize();
         });
+
     });
 
 });
