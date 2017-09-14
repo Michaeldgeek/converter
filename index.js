@@ -256,6 +256,7 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
                 return;
             }
             var code = shell.exec("sudo /snap/bin/libreoffice --infilter='writer_pdf_import' --convert-to doc '" + config.LIBRE_OFFICE_PATH + element + "'").code;
+            var output = fs.createWriteStream(__dirname + '/output.zip');
             var archive = archiver('zip', {
                 gzip: true,
                 zlib: { level: 9 } // Sets the compression level.
