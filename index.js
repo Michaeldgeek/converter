@@ -237,6 +237,15 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
         file.fullPath = config.TEMP + element;
         file.convertTo = element.split('.')[0].trim() + ".docx";
         file.writeTo = config.TEMP + file.convertTo;
+        fs.rename(element, 'a.pdf', function(err) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log('done');
+            return;
+        });
+        return;
         var r = shell.exec('sudo mv /var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '');
         console.log(r);
         return;
