@@ -254,7 +254,7 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
                 return;
             }
             var code = shell.exec('sudo /snap/bin/libreoffice --infilter="writer_pdf_import" --convert-to doc ' + +element).code;
-            console.log(code);
+            console.log(element);
 
         });
         return;
