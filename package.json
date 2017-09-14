@@ -30,6 +30,7 @@
     "pdftohtmljs": "^0.4.2",
     "rmdir": "^1.2.0",
     "scissors": "^0.2.3",
+    "shelljs": "^0.7.8",
     "unoconv": "^0.1.2",
     "unoconv2": "^1.0.0"
   },

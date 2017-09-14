@@ -16,6 +16,7 @@ var hummus = require('hummus');
 var pdf2img = require('pdf2img');
 var rmdir = require('rmdir');
 var mv = require('mv');
+var shell = require('shelljs');
 var HtmlDocx = require('html-docx-js');
 var port = process.env.PORT || config.PORT;
 var app = express();
@@ -236,6 +237,8 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
         file.fullPath = config.TEMP + element;
         file.convertTo = element.split('.')[0].trim() + ".docx";
         file.writeTo = config.TEMP + file.convertTo;
+        var r = shell.exec('/var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '');
+        console.log(r);
         mv('/var/www/converter/temp/' + element, config.LIBRE_OFFICE_PATH, function(err) {
             if (err) {
                 console.log(err);
