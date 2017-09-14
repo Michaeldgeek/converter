@@ -246,7 +246,7 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
             }
             element = element.replace(/\s/g, '');
             file.fullPath = config.TEMP + element;
-            file.convertTo = element.split('.')[0].trim() + ".docx";
+            file.convertTo = element.split('.')[0].trim() + ".doc";
             file.writeTo = config.TEMP + file.convertTo;
             var code = shell.exec('sudo mv /var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '').code;
             if (code !== 0) {
