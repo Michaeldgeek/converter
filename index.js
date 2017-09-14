@@ -234,12 +234,10 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
         var file = {
 
         };
-        file.fullPath = config.TEMP + element.replace(/\s/g, '');
+        file.fullPath = config.TEMP + element;
         file.convertTo = element.split('.')[0].trim() + ".docx";
         file.writeTo = config.TEMP + file.convertTo;
-        console.log(file.fullPath);
-        return;
-        fs.rename('/var/www/converter/temp/' + element, '/var/www/converter/temp/' + 'a.pdf', function(err) {
+        fs.rename('/var/www/converter/temp/' + element, '/var/www/converter/temp/' + element.replace(/\s/g, ''), function(err) {
             if (err) {
                 console.log(err);
                 return;
