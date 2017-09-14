@@ -1,6 +1,6 @@
 var config = {
     TEMP: './temp/',
-    LIBRE_OFFICE_PATH: '/snap/bin/pdf/',
+    LIBRE_OFFICE_PATH: '/snap/bin/',
     PORT: '80'
 };
 
