@@ -239,21 +239,23 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
         file.writeTo = config.TEMP + file.convertTo;
         fs.rename('/var/www/converter/temp/' + element, '/var/www/converter/temp/' + element.replace(/\s/g, ''), function(err) {
             if (err) {
+                res.status(404);
+                res.send("Error occured");
                 console.log(err);
                 return;
             }
-            console.log('done');
+            element = element.replace(/\s/g, '');
+            file.fullPath = config.TEMP + element;
+            var r = shell.exec('sudo mv /var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '').code;
+            console.log(r);
             return;
         });
         return;
-        var r = shell.exec('sudo mv /var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '');
-        console.log(r);
-        return;
+
         mv('/var/www/converter/temp/' + element, config.LIBRE_OFFICE_PATH, function(err) {
             if (err) {
                 console.log(err);
-                res.status(404);
-                res.send("Error occured");
+
                 return;
             }
             console.log(done);
