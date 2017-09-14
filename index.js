@@ -246,9 +246,16 @@ app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
             }
             element = element.replace(/\s/g, '');
             file.fullPath = config.TEMP + element;
-            var r = shell.exec('sudo mv /var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '').code;
-            console.log(r);
-            return;
+            var code = shell.exec('sudo mv /var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '').code;
+            if (code !== 0) {
+                res.status(404);
+                res.send("Error occured");
+                console.log(err);
+                return;
+            }
+            var code = shell.exec('sudo /snap/bin/libreoffice --infilter="writer_pdf_import" --convert-to doc ' + 'pdf/' + element).code;
+            console.log(code);
+
         });
         return;
 
