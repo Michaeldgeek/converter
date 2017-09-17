@@ -247,7 +247,7 @@ app.post('/convert_word_to_pdf', jsonParser, function(req, res) {
             }
             element = element.replace(/\s/g, '');
             file.fullPath = config.TEMP + element;
-            file.convertTo = element.split('.')[0].trim() + ".doc";
+            file.convertTo = element.split('.')[0].trim() + ".pdf";
             file.writeTo = config.TEMP + file.convertTo;
             var code = shell.exec('sudo mv /var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '').code;
             if (code !== 0) {
@@ -256,7 +256,7 @@ app.post('/convert_word_to_pdf', jsonParser, function(req, res) {
                 console.log(err);
                 return;
             }
-            var code = shell.exec("sudo /snap/bin/libreoffice --infilter='writer_pdf_import' --convert-to doc '" + config.LIBRE_OFFICE_PATH + element + "'").code;
+            var code = shell.exec("sudo /snap/bin/libreoffice --infilter='writer_pdf_Export' --convert-to pdf '" + config.LIBRE_OFFICE_PATH + element + "'").code;
             var output = fs.createWriteStream(__dirname + '/output.zip');
             var archive = archiver('zip', {
                 gzip: true,
