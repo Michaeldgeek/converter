@@ -227,6 +227,57 @@ app.post('/convert_to_pdf', jsonParser, function(req, res) {
 
 });
 
+var jsonParser = bodyParser.json()
+app.post('/convert_word_to_pdf', jsonParser, function(req, res) {
+    var data = req.body;
+    var convertedFiles = [];
+    data.forEach(function(element, index, array) {
+        var file = {
+
+        };
+        file.fullPath = config.TEMP + element;
+        file.convertTo = element.split('.')[0].trim() + ".pdf";
+        file.writeTo = config.TEMP + file.convertTo;
+        fs.rename('/var/www/converter/temp/' + element, '/var/www/converter/temp/' + element.replace(/\s/g, ''), function(err) {
+            if (err) {
+                res.status(404);
+                res.send("Error occured");
+                console.log(err);
+                return;
+            }
+            element = element.replace(/\s/g, '');
+            file.fullPath = config.TEMP + element;
+            file.convertTo = element.split('.')[0].trim() + ".doc";
+            file.writeTo = config.TEMP + file.convertTo;
+            var code = shell.exec('sudo mv /var/www/converter/temp/' + element + ' ' + config.LIBRE_OFFICE_PATH + '').code;
+            if (code !== 0) {
+                res.status(404);
+                res.send("Error occured");
+                console.log(err);
+                return;
+            }
+            var code = shell.exec("sudo /snap/bin/libreoffice --infilter='writer_pdf_import' --convert-to doc '" + config.LIBRE_OFFICE_PATH + element + "'").code;
+            var output = fs.createWriteStream(__dirname + '/output.zip');
+            var archive = archiver('zip', {
+                gzip: true,
+                zlib: { level: 9 } // Sets the compression level.
+            });
+            archive.on('error', function(err) {
+                console.log(err);
+            });
+            output.on('close', function() {
+                res.download(__dirname + '/output.zip');
+            });
+            archive.pipe(output);
+            archive.append(fs.createReadStream(config.LIBRE_OFFICE_OUTPUT_PATH + file.convertTo), { name: file.convertTo });
+            archive.finalize();
+        });
+
+    });
+
+});
+
+
 app.post('/convert_from_pdf_word', jsonParser, function(req, res) {
     var data = req.body;
     var convertedFiles = [];
