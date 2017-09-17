@@ -256,7 +256,7 @@ app.post('/convert_word_to_pdf', jsonParser, function(req, res) {
                 console.log(err);
                 return;
             }
-            var code = shell.exec("sudo /snap/bin/libreoffice --infilter='writer_pdf_Export' --convert-to pdf '" + config.LIBRE_OFFICE_PATH + element + "'").code;
+            var code = shell.exec("sudo /snap/bin/libreoffice -convert-to pdf:writer_pdf_Export '" + config.LIBRE_OFFICE_PATH + element + "'").code;
             var output = fs.createWriteStream(__dirname + '/output.zip');
             var archive = archiver('zip', {
                 gzip: true,
