@@ -1,4 +1,4 @@
-<!DOCTYPE html >
+<!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js " > <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js " > <![endif]-->
 <!--[if !IE]><!-->
@@ -18,12 +18,15 @@
     <script src="/js/ng-file-upload-shim.min.js"></script>
     <script src="/js/ng-file-upload.min.js"></script>
     <script src="/js/FileSaver.min.js"></script>
-    <script src="/js/app.js" /></script>
+    <script src="/js/app.js" />
+    </script>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 
-<body class="page-header-fixed page-full-width page-footer-fixed LGen index cactionindex brwFirefox ver54 mob systemWindows app" data-ng-controller="WordToPdfCtrl" id="body">
+<body
+    class="page-header-fixed page-full-width page-footer-fixed LGen index cactionindex brwFirefox ver54 mob systemWindows app"
+    data-ng-controller="WordToPdfCtrl" id="body">
 
     <!-- BEGIN HEADER -->
     <div class="header navbar navbar-fixed-top" id="header">
@@ -68,12 +71,14 @@
         <div class="page-content">
             <div class="col-md-12">
                 <div class="btn-group views" data-toggle="buttons">
-                    <label onclick="changeToGridview();" id="gridView" class="btn btn-default tooltips" data-placement="bottom" data-original-title="Change to cover view mode">
-                            <input type="radio" class="toggle"> <i class="fa fa-file-o"></i> </label>
+                    <label onclick="changeToGridview();" id="gridView" class="btn btn-default tooltips"
+                        data-placement="bottom" data-original-title="Change to cover view mode">
+                        <input type="radio" class="toggle"> <i class="fa fa-file-o"></i> </label>
                 </div>
                 <div class="btn-group views" data-toggle="buttons">
-                    <label onclick="changeToListview();" id="listView" class="btn btn-default tooltips" data-placement="bottom" data-original-title="Change to list view mode">
-                            <input type="radio" class="toggle"> <i class="fa fa-bars"></i> </label>
+                    <label onclick="changeToListview();" id="listView" class="btn btn-default tooltips"
+                        data-placement="bottom" data-original-title="Change to list view mode">
+                        <input type="radio" class="toggle"> <i class="fa fa-bars"></i> </label>
                 </div>
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h1 class="page-title tool">
@@ -82,32 +87,42 @@
                 <h2 class="page-subtitle">Make JPG and JPEG files easy to read by converting them to PDF.</h2>
                 <hr class="h1">
                 <div id="upload-container">
-                    <a type="button" class="btn redlove btn-xl" id="pickfiles" data-ng-if="!state.actions" data-ng-click="state.select();" href="javascript:;">Select JPEG file</a>
+                    <a type="button" class="btn redlove btn-xl" id="pickfiles" data-ng-if="!state.actions"
+                        data-ng-click="state.select();" href="javascript:;">Select JPEG file</a>
                     <div class="exbu" style="visibility: hidden">
-                        <a class="btn redlove btn-icon tooltips" id="gdrive_file_selector" onclick="onApiLoad();" data-placement="right" data-original-title="Select WORD from Google Drive">
-                            <img src="/images/svg_icons/google-drive.svg" width="18px" onerror="this.src='/images/google-drive.png'; this.onerror=null;" alt="" />
+                        <a class="btn redlove btn-icon tooltips" id="gdrive_file_selector" onclick="onApiLoad();"
+                            data-placement="right" data-original-title="Select WORD from Google Drive">
+                            <img src="/images/svg_icons/google-drive.svg" width="18px"
+                                onerror="this.src='/images/google-drive.png'; this.onerror=null;" alt="" />
                         </a>
-                        <a class="btn redlove btn-icon tooltips" id="dropbox_file_selector" onclick="dropbox()" data-placement="right" data-original-title="Select WORD from Dropbox">
-                            <img src="/images/svg_icons/dropbox.svg" width="18px" onerror="this.src='/images/dropbox.png'; this.onerror=null;" alt="" />
+                        <a class="btn redlove btn-icon tooltips" id="dropbox_file_selector" onclick="dropbox()"
+                            data-placement="right" data-original-title="Select WORD from Dropbox">
+                            <img src="/images/svg_icons/dropbox.svg" width="18px"
+                                onerror="this.src='/images/dropbox.png'; this.onerror=null;" alt="" />
                         </a>
 
                     </div>
-                    <br/>
+                    <br />
                 </div>
             </div>
             <div id="fileGroups" class="margin-top-20" data-ng-show="state.preview">
-                <div class="file tooltips " data-ng-repeat="file in state.files" rel="user" data-placement="top" data-original-title="17 KB">
-                    <a class="btn btn-icon-only grey remove tooltips " style="display: initial;margin-left: 230px;" data-ng-click="state.close($event.currentTarget,file)" style="display: initial" data-placement="top" data-original-title="Remove this file">
+                <div class="file tooltips " data-ng-repeat="file in state.files" rel="user" data-placement="top"
+                    data-original-title="17 KB">
+                    <a class="btn btn-icon-only grey remove tooltips " style="display: initial;margin-left: 230px;"
+                        data-ng-click="state.close($event.currentTarget,file)" style="display: initial"
+                        data-placement="top" data-original-title="Remove this file">
                         <i class="fa fa-times"></i>
                     </a>
-                    <img id="imageCanvas" width="250" height="250" style='width: 250px; height: 250px' ngf-src="file" ngf-background="file" ngf-no-object-url="false" ngf-fix-orientation="true" />
+                    <img id="imageCanvas" width="250" height="250" style='width: 250px; height: 250px' ngf-src="file"
+                        ngf-background="file" ngf-no-object-url="false" ngf-fix-orientation="true" />
                     <div class="fileInfo" style="margin-top: 0">
                         <span class="filename" style="margin-left: auto; word-wrap: break-word">{{file.name}}</span>
                     </div>
                 </div>
             </div>
             <form class="hide">
-                <input id="file" type="file" ngf-select="state.uploadFiles($files, $invalidFiles)" accept="image/jpeg, image/jpg,image/png" />
+                <input id="file" type="file" ngf-select="state.uploadFiles($files, $invalidFiles)"
+                    accept="image/jpeg, image/jpg,image/png" />
             </form>
             <!-- END PAGE CONTENT-->
         </div>
@@ -118,10 +133,13 @@
     <!-- BEGIN FOOTER -->
     <div class="footer" style="background-color: rgb(255, 255, 255);">
         <div class="footer-button redlove" data-ng-show="state.actions" id="footer-button" style="display: block;">
-            <a type="button" id="uploadfiles" href="javascript:;" data-ng-click="state.convert(state.files)" class="btn black btn-xl"> Convert to PDF </a>
+            <a type="button" id="uploadfiles" href="javascript:;" data-ng-click="state.convert(state.files)"
+                class="btn black btn-xl"> Convert to PDF </a>
         </div>
-        <div class="footer-button redlove" data-ng-show="((state.download === true) && (state.actions == false))" id="footer-button" style="display: block;">
-            <a type="button" id="uploadfiles" href="javascript:;" data-ng-click="state.downloadZip()" class="btn black btn-xl"> Download </a>
+        <div class="footer-button redlove" data-ng-show="((state.download === true) && (state.actions == false))"
+            id="footer-button" style="display: block;">
+            <a type="button" id="uploadfiles" href="javascript:;" data-ng-click="state.downloadZip()"
+                class="btn black btn-xl"> Download </a>
         </div>
         <div class="footer-tools">
 
