@@ -1,5 +1,5 @@
 var app = angular.module('myApp', ['ngFileUpload']);
-app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', function ($scope, $document, Upload, $http) {
+app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($scope, $document, Upload, $http) {
     function State() {
         var self = this;
         this.preview = false;
@@ -40,7 +40,7 @@ app.controller('WordToPdfCtrl', ['$scope', '$document', 'Upload', '$http', funct
             $scope.state.download = false;
             $http({
                 method: 'POST',
-                url: '/convert_to_pdf',
+                url: $scope.convertUrl,
                 data: data,
                 headers: {
                     "Content-Type": "application/json",
