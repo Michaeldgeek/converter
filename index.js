@@ -83,9 +83,7 @@ app.post("/word_to_pdf", multipartyMiddleware, function (req, res) {
                 res.send("error");
                 return;
             }
-            res.send({
-                ext: ".pdf"
-            });
+            res.send("ok");
         });
     });
 });
@@ -243,7 +241,7 @@ app.post("/convert_to_pdf", jsonParser, function (req, res) {
         file.fullPath = config.TEMP + element;
         file.convertTo = element.split(".")[0].trim() + ".pdf";
         var code = shell.exec(
-            "sudo libreoffice  --convert-to pdf " + header + " --outdir ./downloads " +
+            "sudo libreoffice  --convert-to pdf --outdir ./downloads " +
             file.fullPath +
             ""
         ).code;
@@ -252,9 +250,6 @@ app.post("/convert_to_pdf", jsonParser, function (req, res) {
             res.send("error");
             return;
         }
-        fs.renameSync(__dirname + "/" + config.DOWNLOADS + file.convertTo, __dirname + "/" + config.DOWNLOADS + header);
-        res.download(__dirname + "/" + config.DOWNLOADS + header);
-        return;
         var output = fs.createWriteStream(
             __dirname + "/" + config.DOWNLOADS + header
         );
