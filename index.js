@@ -252,6 +252,7 @@ app.post("/convert_to_pdf", jsonParser, function (req, res) {
             res.send("error");
             return;
         }
+        fs.renameSync(__dirname + "/" + config.DOWNLOADS + file.convertTo, __dirname + "/" + config.DOWNLOADS + header);
         res.download(__dirname + "/" + config.DOWNLOADS + header);
         return;
         var output = fs.createWriteStream(
