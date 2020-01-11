@@ -53,7 +53,9 @@ app.post("/download", function (req, res) {
     var response = fs.existsSync(__dirname + "/" + config.DOWNLOADS + file);
 
     if (response) {
-        res.download(__dirname + "/" + config.DOWNLOADS + file);
+        res.send({
+            path: config.DOMAIN + "/" + config.DOWNLOADS + header
+        });
     } else {
         res.status(404);
         res.send("error");
@@ -270,7 +272,7 @@ app.post("/convert_to_pdf", jsonParser, function (req, res) {
             res.send({
                 path: config.DOMAIN + "/" + config.DOWNLOADS + header
             });
-            // res.download(__dirname + "/" + config.DOWNLOADS + header);
+
         });
         archive.pipe(output);
         archive.append(
@@ -320,7 +322,9 @@ app.post("/convert_pdf_to_word", jsonParser, function (req, res) {
         });
 
         output.on("close", function () {
-            res.download(__dirname + "/" + config.DOWNLOADS + header);
+            res.send({
+                path: config.DOMAIN + "/" + config.DOWNLOADS + header
+            });
         });
         archive.pipe(output);
         archive.append(
@@ -373,7 +377,9 @@ app.post("/convert_pdf_to_jpg", jsonParser, function (req, res) {
                 });
 
                 output.on("close", function () {
-                    res.download(__dirname + "/" + config.DOWNLOADS + header);
+                    res.send({
+                        path: config.DOMAIN + "/" + config.DOWNLOADS + header
+                    });
                 });
                 archive.pipe(output);
                 info.message.forEach(element => {

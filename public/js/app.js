@@ -52,10 +52,7 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
                 $scope.state.download = true;
                 $scope.state.loader = false;
                 window.location.href = success.data.path;
-                // var file = new Blob([success.data], {
-                //   type: 'application/zip'
-                //});
-                //saveAs(file, $scope.state.downloadId + ".zip");
+
             }, function (err) {
                 $scope.state.loader = false;
                 alert('An error occured');
@@ -70,13 +67,10 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
                 headers: {
                     "file": $scope.state.downloadId + ".zip"
                 },
-                responseType: 'blob'
+                responseType: 'application/zip'
             }).then(function (success) {
                 $scope.state.loader = false;
-                var file = new Blob([success.data], {
-                    type: 'application/zip'
-                });
-                saveAs(file, $scope.state.downloadId + ".zip");
+                window.location.href = success.data.path;
             }, function (err) {
                 $scope.state.loader = false;
                 alert('File no longer exist');
@@ -93,7 +87,6 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
                     }
                 });
                 file.upload.then(function (success) {
-                    //file.result = success.data;
                     if (success.data === "error") {
                         alert("Check your network");
                         $scope.state.loader = false;
@@ -103,7 +96,6 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
                     $scope.state.actions = true;
                     $scope.state.loader = false;
                     $scope.state.files.push(file);
-                    console.log(file);
                 }, function (error) {
                     if (error.status === 404) {
                         alert(error.data);
