@@ -49,12 +49,11 @@ app.get("/pdf_to_word", function (req, res) {
 });
 
 app.post("/download", function (req, res) {
-    var file = req.header("file");
+    var file = req.get("file");
     var response = fs.existsSync(__dirname + "/" + config.DOWNLOADS + file);
-
     if (response) {
         res.send({
-            path: config.DOMAIN + "/" + config.DOWNLOADS + header
+            path: config.DOMAIN + "/" + config.DOWNLOADS + file
         });
     } else {
         res.status(404);
