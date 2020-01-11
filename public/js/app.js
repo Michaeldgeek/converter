@@ -4,6 +4,7 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
         var self = this;
         this.preview = false;
         this.actions = false;
+        this.ext = "";
         this.loader = false;
         this.downloadId = Math.random().toString(36).substring(7).toString();
         this.files = [];
@@ -44,7 +45,7 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
                 data: data,
                 headers: {
                     "Content-Type": "application/json",
-                    "save-as": $scope.state.downloadId + ".zip"
+                    "save-as": $scope.state.downloadId + $scope.state.ext
                 },
                 responseType: 'blob',
                 dataType: 'json'
@@ -52,9 +53,9 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
                 $scope.state.download = true;
                 $scope.state.loader = false;
                 var file = new Blob([success.data], {
-                    type: 'application/zip'
+                    type: 'application/' + $scope.state.ext
                 });
-                saveAs(file, $scope.state.downloadId + ".zip");
+                saveAs(file, $scope.state.downloadId + $scope.state.ext);
             }, function (err) {
                 $scope.state.loader = false;
                 alert('An error occured');
@@ -67,15 +68,15 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
                 method: 'POST',
                 url: '/download',
                 headers: {
-                    "file": $scope.state.downloadId + ".zip"
+                    "file": $scope.state.downloadId + $scope.state.ext
                 },
                 responseType: 'blob'
             }).then(function (success) {
                 $scope.state.loader = false;
                 var file = new Blob([success.data], {
-                    type: 'application/zip'
+                    type: 'application/' + $scope.state.ext
                 });
-                saveAs(file, $scope.state.downloadId + ".zip");
+                saveAs(file, $scope.state.downloadId + $scope.state.ext);
             }, function (err) {
                 $scope.state.loader = false;
                 alert('File no longer exist');
@@ -102,7 +103,7 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
                     $scope.state.actions = true;
                     $scope.state.loader = false;
                     $scope.state.files.push(file);
-                    console.log(file);
+                    $scope.state.ext = success.data.ext
                 }, function (error) {
                     if (error.status === 404) {
                         alert(error.data);

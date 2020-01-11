@@ -83,7 +83,9 @@ app.post("/word_to_pdf", multipartyMiddleware, function (req, res) {
                 res.send("error");
                 return;
             }
-            res.send("ok");
+            res.send({
+                ext: ".pdf"
+            });
         });
     });
 });
@@ -250,6 +252,8 @@ app.post("/convert_to_pdf", jsonParser, function (req, res) {
             res.send("error");
             return;
         }
+        res.download(__dirname + "/" + config.DOWNLOADS + header);
+        return;
         var output = fs.createWriteStream(
             __dirname + "/" + config.DOWNLOADS + header
         );
