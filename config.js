@@ -1,6 +1,6 @@
 var config = {
     TEMP: './temp/',
-    PORT: '9092',
+    PORT: '8080',
     DOWNLOADS: 'downloads/'
 
 };
