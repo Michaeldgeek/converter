@@ -243,7 +243,7 @@ app.post("/convert_to_pdf", jsonParser, function (req, res) {
         file.fullPath = config.TEMP + element;
         file.convertTo = element.split(".")[0].trim() + ".pdf";
         var code = shell.exec(
-            "sudo libreoffice  --convert-to pdf --outdir ./downloads " +
+            "sudo libreoffice  --convert-to pdf " + header + " --outdir ./downloads " +
             file.fullPath +
             ""
         ).code;
