@@ -46,15 +46,16 @@ app.controller('AppCtrl', ['$scope', '$document', 'Upload', '$http', function ($
                     "Content-Type": "application/json",
                     "save-as": $scope.state.downloadId + ".zip"
                 },
-                responseType: 'blob',
+                responseType: 'application/zip',
                 dataType: 'json'
             }).then(function (success) {
                 $scope.state.download = true;
                 $scope.state.loader = false;
-                var file = new Blob([success.data], {
-                    type: 'application/zip'
-                });
-                saveAs(file, $scope.state.downloadId + ".zip");
+                window.location.href = success.data.path;
+                // var file = new Blob([success.data], {
+                //   type: 'application/zip'
+                //});
+                //saveAs(file, $scope.state.downloadId + ".zip");
             }, function (err) {
                 $scope.state.loader = false;
                 alert('An error occured');

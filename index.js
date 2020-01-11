@@ -17,6 +17,7 @@ var app = express();
 app.use(compression());
 app.use(minify());
 app.use("/", express.static(__dirname + "/public"));
+app.use("/downloads/", express.static(__dirname + "/downloads"));
 app.set("view engine", "ejs");
 
 app.get("/", function (req, res) {
@@ -266,7 +267,10 @@ app.post("/convert_to_pdf", jsonParser, function (req, res) {
         });
 
         output.on("close", function () {
-            res.download(__dirname + "/" + config.DOWNLOADS + header);
+            res.send({
+                path: config.DOMAIN + "/" + config.DOWNLOADS + header
+            });
+            // res.download(__dirname + "/" + config.DOWNLOADS + header);
         });
         archive.pipe(output);
         archive.append(
